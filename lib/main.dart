@@ -1,7 +1,5 @@
+import 'package:expense_calculator/widgets/user_transaction.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
-import './transaction.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,76 +13,39 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  static List<Transaction> _transaction = [
-    Transaction(id: "1", title: "SDA", amount: 2.3, date: DateTime.now()),
-    Transaction(id: "2", title: "SDA2", amount: 2.4, date: DateTime.now())
-  ];
+  // static List<Transaction> _transaction = [
+  //   Transaction(id: "1", title: "SDA", amount: 2.3, date: DateTime.now()),
+  //   Transaction(id: "2", title: "SDA2", amount: 2.4, date: DateTime.now())
+  // ];
+
+  // String titleInput;
+  // String amountInput;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-          appBar: AppBar(
-            title: Text("SDA"),
-            backgroundColor: Colors.lightGreen,
-          ),
-          body: Column(children: [
+        appBar: AppBar(
+          title: Text("SDA"),
+          backgroundColor: Colors.lightGreen,
+        ),
+        body: SingleChildScrollView(
+          child: Column(children: [
             Container(
               width: double.infinity,
               color: Colors.lightGreenAccent,
               child: Card(
-                child: Text("CHART!"),
+                child: Text(
+                  "CHART!",
+                  textAlign: TextAlign.center,
+                ),
                 elevation: 5,
               ),
             ),
-            Column(
-              children: _transaction.map((listData) {
-                return Card(
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.purple, width: 2),
-                        ),
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          '\$ ${listData.amount}',
-                          style: TextStyle(
-                            color: Colors.purple,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            listData.title,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                          Text(
-                            DateFormat.yMMMd().format(listData.date),
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  elevation: 5,
-                );
-              }).toList(),
-            ),
-          ])),
+            UserTransaction(),
+          ]),
+        ),
+      ),
     );
   }
 }
