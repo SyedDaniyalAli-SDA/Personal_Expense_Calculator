@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AddTransaction extends StatefulWidget {
-  final Function _addTransaction;
 
+  //  Getting Transaction Function into StateFul Widget~~~~~~~~~~~~~~~~~~~~~~~~~
+  final Function _addTransaction;
   AddTransaction(this._addTransaction);
 
   @override
@@ -10,18 +11,27 @@ class AddTransaction extends StatefulWidget {
 }
 
 class _AddTransactionState extends State<AddTransaction> {
-  final titleController = TextEditingController();
 
+  //Declaring Controllers of TextFields~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  final titleController = TextEditingController();
   final amountController = TextEditingController();
 
+  //Method to Pass New Transaction to transaction Function~~~~~~~~~~~~~~~~~~~~~~
   void _addNewTransaction() {
+
+    //Initializing Controllers of TextFields~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     String txTitle = titleController.text;
     double txAmount = double.parse(amountController.text);
 
+    //Validating Data
     if (txTitle.isEmpty || txAmount <= 0) {
       return;
     }
+
+    //Passing Arguments
     widget._addTransaction(txTitle, txAmount);
+
+    //Closing BottomSheet
     Navigator.of(context).pop();
   }
 
