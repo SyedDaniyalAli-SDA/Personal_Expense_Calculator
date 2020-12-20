@@ -12,7 +12,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Making MaterialApp as a Root Widget~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Making MaterialApp as a Root ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     return MaterialApp(
       home: MyHomePage(),
       title: "Personal Expense",
