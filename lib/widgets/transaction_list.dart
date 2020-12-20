@@ -50,6 +50,7 @@ class TransactionList extends StatelessWidget {
                         color: Colors.grey,
                         fontSize: 12,
                       ),
+
                     ),
                   ],
                 )
