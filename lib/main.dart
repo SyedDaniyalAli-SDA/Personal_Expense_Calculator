@@ -14,7 +14,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: MyHomePage(),
       title: "Personal Expense",
-      theme: ThemeData(primarySwatch: Colors.purple, accentColor: Colors.amber),
+      theme: ThemeData(
+          primarySwatch: Colors.purple,
+          accentColor: Colors.amber,
+          fontFamily: 'OpenSans'),
     );
   }
 }
@@ -54,6 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
           );
         });
   }
+
   //Show Bottom SheetXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
   @override
