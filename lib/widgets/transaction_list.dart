@@ -4,16 +4,18 @@ import 'package:intl/intl.dart';
 import '../models/transaction.dart';
 
 class TransactionList extends StatelessWidget {
+
 //  Getting Transaction List~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   final List<Transaction> transaction;
-
   TransactionList(this.transaction);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 300,
+      //ListView Builder takes two args itemBuilder and itemCount~~~~~~~~~~~~~~~
       child: ListView.builder(
+        //itemBuilder takes two args context and indexNumber~~~~~~~~~~~~~~~~~~~~
         itemBuilder: (ctx, indexNumber) {
           return Card(
             child: Row(
@@ -59,6 +61,8 @@ class TransactionList extends StatelessWidget {
             elevation: 5,
           );
         },
+
+        //Item Count takes length of array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         itemCount: transaction.length,
         padding: EdgeInsets.all(10),
       ),
