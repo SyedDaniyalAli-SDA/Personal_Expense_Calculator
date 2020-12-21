@@ -1,3 +1,4 @@
+import 'package:expense_calculator/widgets/chart.dart';
 import 'package:flutter/material.dart';
 
 import './models/transaction.dart';
@@ -19,7 +20,26 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
         accentColor: Colors.amber,
-        fontFamily: 'OpenSans',
+        fontFamily: 'Quicksand',
+        textTheme: ThemeData.light().textTheme.copyWith(
+              headline1: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'OpenSans'),
+              headline6: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'OpenSans'),
+            ),
+        appBarTheme: AppBarTheme(
+          textTheme: ThemeData.light().textTheme.copyWith(
+                headline6: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'OpenSans',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+        ),
       ),
     );
   }
@@ -33,10 +53,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  List<Transaction> get _recentTransactions
+  {
+    return _userTransaction.where((element){
+      return element.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
+    }).toList();
+  }
   //InitializingArray of Transaction~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   final List<Transaction> _userTransaction = [
-    Transaction(id: "1", title: "SDA", amount: 2.3, date: DateTime.now()),
-    Transaction(id: "2", title: "SDA2", amount: 2.4, date: DateTime.now())
+    // Transaction(id: "1", title: "SDA", amount: 2.3, date: DateTime.now()),
+    // Transaction(id: "2", title: "SDA2", amount: 2.4, date: DateTime.now())
   ];
 
   //Method to add New Transaction to array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -77,17 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
-          Container(
-            width: double.infinity,
-            child: Card(
-              color: Theme.of(context).accentColor,
-              child: Text(
-                "CHART!",
-                textAlign: TextAlign.center,
-              ),
-              elevation: 5,
-            ),
-          ),
+          Chart(_recentTransactions),
           TransactionList(_userTransaction),
         ]),
       ),
