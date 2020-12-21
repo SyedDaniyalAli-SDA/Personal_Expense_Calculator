@@ -1,3 +1,4 @@
+import 'package:expense_calculator/widgets/chart.dart';
 import 'package:flutter/material.dart';
 
 import './models/transaction.dart';
@@ -52,10 +53,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  List<Transaction> get _recentTransactions
+  {
+    return _userTransaction.where((element){
+      return element.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
+    }).toList();
+  }
   //InitializingArray of Transaction~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   final List<Transaction> _userTransaction = [
-    Transaction(id: "1", title: "SDA", amount: 2.3, date: DateTime.now()),
-    Transaction(id: "2", title: "SDA2", amount: 2.4, date: DateTime.now())
+    // Transaction(id: "1", title: "SDA", amount: 2.3, date: DateTime.now()),
+    // Transaction(id: "2", title: "SDA2", amount: 2.4, date: DateTime.now())
   ];
 
   //Method to add New Transaction to array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -96,17 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
-          Container(
-            width: double.infinity,
-            child: Card(
-              color: Theme.of(context).accentColor,
-              child: Text(
-                "CHART!",
-                textAlign: TextAlign.center,
-              ),
-              elevation: 5,
-            ),
-          ),
+          Chart(_recentTransactions),
           TransactionList(_userTransaction),
         ]),
       ),
