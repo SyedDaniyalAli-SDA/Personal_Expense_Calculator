@@ -1,8 +1,8 @@
-import 'package:expense_calculator/widgets/chart.dart';
 import 'package:flutter/material.dart';
 
 import './models/transaction.dart';
 import './widgets/add_transaction.dart';
+import './widgets/chart.dart';
 import './widgets/transaction_list.dart';
 
 void main() {
@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'OpenSans'),
+              button: TextStyle(color: Colors.white),
             ),
         appBarTheme: AppBarTheme(
           textTheme: ThemeData.light().textTheme.copyWith(
@@ -53,27 +54,33 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  List<Transaction> get _recentTransactions
-  {
-    return _userTransaction.where((element){
+  List<Transaction> get _recentTransactions {
+    return _userTransaction.where((element) {
       return element.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
     }).toList();
   }
+
   //InitializingArray of Transaction~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   final List<Transaction> _userTransaction = [
-    // Transaction(id: "1", title: "SDA", amount: 2.3, date: DateTime.now()),
-    // Transaction(id: "2", title: "SDA2", amount: 2.4, date: DateTime.now())
+    Transaction(id: "1", title: "SDA", amount: 2.3, date: DateTime.now()),
+    Transaction(id: "2", title: "SDA2", amount: 2.4, date: DateTime.now())
   ];
 
   //Method to add New Transaction to array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  void _addNewTransaction(String txTitle, double txAmount) {
+  void _addNewTransaction(String txTitle, double txAmount, DateTime chosenDate) {
     setState(() {
       _userTransaction.add(new Transaction(
           id: DateTime.now().toString(),
           title: txTitle,
           amount: txAmount,
-          date: DateTime.now()));
+          date: chosenDate));
+    });
+  }
+
+  void _deleteTransaction(String id)
+  {
+    setState(() {
+      _userTransaction.removeWhere((listData) => listData.id==id);
     });
   }
 
@@ -105,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SingleChildScrollView(
         child: Column(children: [
           Chart(_recentTransactions),
-          TransactionList(_userTransaction),
+          TransactionList(_userTransaction, _deleteTransaction),
         ]),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
