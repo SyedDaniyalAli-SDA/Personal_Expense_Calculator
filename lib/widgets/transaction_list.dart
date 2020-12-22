@@ -16,24 +16,26 @@ class TransactionList extends StatelessWidget {
       height: 400,
       //ListView Builder takes two args itemBuilder and itemCount~~~~~~~~~~~~~~~
       child: transaction.isEmpty
-          ? Column(
-              children: <Widget>[
-                Text(
-                  "No Transactions added yet!",
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  height: 200,
-                  child: Image.asset(
-                    'assets/images/waiting.png',
-                    fit: BoxFit.cover,
+          ? LayoutBuilder(builder: (ctx, constraints) {
+              return Column(
+                children: <Widget>[
+                  Text(
+                    "No Transactions added yet!",
+                    style: Theme.of(context).textTheme.headline6,
                   ),
-                ),
-              ],
-            )
+                  SizedBox(
+                    height: constraints.maxHeight * 0.06,
+                  ),
+                  Container(
+                    height: constraints.maxHeight * 0.6,
+                    child: Image.asset(
+                      'assets/images/waiting.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              );
+            })
           : ListView.builder(
               //itemBuilder takes two args context and indexNumber~~~~~~~~~~~~~~~~~~~~
               itemBuilder: (ctx, indexNumber) {
@@ -60,13 +62,21 @@ class TransactionList extends StatelessWidget {
                       DateFormat.yMMMd().format(transaction[indexNumber].date),
                       style: Theme.of(context).textTheme.caption,
                     ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        _deletedTransactionFunc(transaction[indexNumber].id);
-                      },
-                      color: Theme.of(context).errorColor,
-                    ),
+                    trailing: MediaQuery.of(context).size.width > 460
+                        ? FlatButton.icon(
+                            icon: Icon(Icons.delete),
+                            label: Text('Delete'),
+                            textColor: Theme.of(context).errorColor,
+                            onPressed: () => _deletedTransactionFunc(
+                                transaction[indexNumber].id))
+                        : IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              _deletedTransactionFunc(
+                                  transaction[indexNumber].id);
+                            },
+                            color: Theme.of(context).errorColor,
+                          ),
                   ),
                 );
               },
