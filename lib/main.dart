@@ -16,7 +16,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Making MaterialApp as a Root Widget~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Making MaterialApp as a Root ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     return MaterialApp(
       home: MyHomePage(),
       title: "Personal Expense",
@@ -68,8 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //InitializingArray of Transaction~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   final List<Transaction> _userTransaction = [
-    Transaction(id: "1", title: "SDA", amount: 2.3, date: DateTime.now()),
-    Transaction(id: "2", title: "SDA2", amount: 2.4, date: DateTime.now())
+
   ];
 
   //Method to add New Transaction to array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
