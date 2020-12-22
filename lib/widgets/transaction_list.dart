@@ -13,7 +13,7 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 400,
       //ListView Builder takes two args itemBuilder and itemCount~~~~~~~~~~~~~~~
       child: transaction.isEmpty
           ? Column(

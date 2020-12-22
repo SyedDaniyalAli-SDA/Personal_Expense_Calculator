@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import './models/transaction.dart';
 import './widgets/add_transaction.dart';
@@ -6,6 +7,9 @@ import './widgets/chart.dart';
 import './widgets/transaction_list.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitUp]);
   runApp(MyApp());
 }
 
@@ -54,6 +58,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool _showChartSwitchBtn = false;
+
   List<Transaction> get _recentTransactions {
     return _userTransaction.where((element) {
       return element.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
@@ -67,7 +73,8 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   //Method to add New Transaction to array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  void _addNewTransaction(String txTitle, double txAmount, DateTime chosenDate) {
+  void _addNewTransaction(
+      String txTitle, double txAmount, DateTime chosenDate) {
     setState(() {
       _userTransaction.add(new Transaction(
           id: DateTime.now().toString(),
@@ -77,10 +84,9 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _deleteTransaction(String id)
-  {
+  void _deleteTransaction(String id) {
     setState(() {
-      _userTransaction.removeWhere((listData) => listData.id==id);
+      _userTransaction.removeWhere((listData) => listData.id == id);
     });
   }
 
@@ -99,20 +105,50 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appBar = AppBar(
+      title: Text("Personal Expense"),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.add_chart),
+          onPressed: () => _showTransactionModalSheet(context),
+        )
+      ],
+    );
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Personal Expense"),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add_chart),
-            onPressed: () => _showTransactionModalSheet(context),
-          )
-        ],
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(children: [
-          Chart(_recentTransactions),
-          TransactionList(_userTransaction, _deleteTransaction),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Show Chart",
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              Switch(
+                  value: _showChartSwitchBtn,
+                  onChanged: (takeBool) {
+                    setState(() {
+                      _showChartSwitchBtn = takeBool;
+                    });
+                  })
+            ],
+          ),
+          _showChartSwitchBtn
+              ? Container(
+                  height: (MediaQuery.of(context).size.height -
+                          appBar.preferredSize.height -
+                          MediaQuery.of(context).padding.top) *
+                      0.3,
+                  child: Chart(_recentTransactions))
+              : Container(
+                  height: (MediaQuery.of(context).size.height -
+                          appBar.preferredSize.height -
+                          MediaQuery.of(context).padding.top) *
+                      0.7,
+                  child: TransactionList(_userTransaction, _deleteTransaction),
+                ),
         ]),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
