@@ -112,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(children: [
           Chart(_recentTransactions),
           TransactionList(_userTransaction, _deleteTransaction),
-        ]),
+        ]), 
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
