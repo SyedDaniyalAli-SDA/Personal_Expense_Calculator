@@ -4,64 +4,76 @@ import 'package:intl/intl.dart';
 import '../models/transaction.dart';
 
 class TransactionList extends StatelessWidget {
-
 //  Getting Transaction List~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   final List<Transaction> transaction;
-  TransactionList(this.transaction);
+  final Function _deletedTransactionFunc;
+
+  TransactionList(this.transaction, this._deletedTransactionFunc);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 400,
       //ListView Builder takes two args itemBuilder and itemCount~~~~~~~~~~~~~~~
-      child: ListView.builder(
-        //itemBuilder takes two args context and indexNumber~~~~~~~~~~~~~~~~~~~~
-        itemBuilder: (ctx, indexNumber) {
-          return Card(
-            child: Row(
+      child: transaction.isEmpty
+          ? Column(
               children: <Widget>[
+                Text(
+                  "No Transactions added yet!",
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Theme.of(context).primaryColor, width: 2),
-                  ),
-                  padding: EdgeInsets.all(10),
-                  child: Text(
-                    '\$ ${transaction[indexNumber].amount}',
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  height: 200,
+                  child: Image.asset(
+                    'assets/images/waiting.png',
+                    fit: BoxFit.cover,
                   ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
+              ],
+            )
+          : ListView.builder(
+              //itemBuilder takes two args context and indexNumber~~~~~~~~~~~~~~~~~~~~
+              itemBuilder: (ctx, indexNumber) {
+                return Card(
+                  elevation: 5,
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 30,
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: FittedBox(
+                          child: Text(
+                            "\$${transaction[indexNumber].amount}",
+                          ),
+                        ),
+                      ),
+                    ),
+                    title: Text(
                       transaction[indexNumber].title,
                       style: Theme.of(context).textTheme.headline6,
                     ),
-                    Text(
+                    subtitle: Text(
                       DateFormat.yMMMd().format(transaction[indexNumber].date),
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                      ),
-
+                      style: Theme.of(context).textTheme.caption,
                     ),
-                  ],
-                )
-              ],
-            ),
-            elevation: 5,
-          );
-        },
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        _deletedTransactionFunc(transaction[indexNumber].id);
+                      },
+                      color: Theme.of(context).errorColor,
+                    ),
+                  ),
+                );
+              },
 
-        //Item Count takes length of array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        itemCount: transaction.length,
-        padding: EdgeInsets.all(10),
-      ),
+              //Item Count takes length of array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              itemCount: transaction.length,
+            ),
     );
   }
 }
