@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import './models/transaction.dart';
 import './widgets/add_transaction.dart';
@@ -7,9 +8,9 @@ import './widgets/chart.dart';
 import './widgets/transaction_list.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitUp]);
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations(
+  //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitUp]);
   runApp(MyApp());
 }
 
@@ -68,7 +69,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //InitializingArray of Transaction~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   final List<Transaction> _userTransaction = [
-
+    Transaction(id: '1', title: 'Record 1', amount: 12, date: DateTime.now()),
+    Transaction(id: '1', title: 'Record 1', amount: 12, date: DateTime.now()),
+    Transaction(id: '1', title: 'Record 1', amount: 12, date: DateTime.now()),
+    Transaction(id: '1', title: 'Record 1', amount: 12, date: DateTime.now()),
+    Transaction(id: '1', title: 'Record 1', amount: 12, date: DateTime.now())
   ];
 
   //Method to add New Transaction to array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -104,6 +109,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final _mediaQueryObject = MediaQuery.of(context);
+    final _isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
+    // Variables of Widgets~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     final appBar = AppBar(
       title: Text("Personal Expense"),
       actions: <Widget>[
@@ -114,47 +124,64 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
 
+    final _transactionListWidget = Container(
+      height: (_mediaQueryObject.size.height -
+              appBar.preferredSize.height -
+              _mediaQueryObject.padding.top) *
+          0.7,
+      child: TransactionList(_userTransaction, _deleteTransaction),
+    );
+
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
         child: Column(children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Show Chart",
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              Switch(
-                  value: _showChartSwitchBtn,
-                  onChanged: (takeBool) {
-                    setState(() {
-                      _showChartSwitchBtn = takeBool;
-                    });
-                  })
-            ],
-          ),
-          _showChartSwitchBtn
-              ? Container(
-                  height: (MediaQuery.of(context).size.height -
-                          appBar.preferredSize.height -
-                          MediaQuery.of(context).padding.top) *
-                      0.3,
-                  child: Chart(_recentTransactions))
-              : Container(
-                  height: (MediaQuery.of(context).size.height -
-                          appBar.preferredSize.height -
-                          MediaQuery.of(context).padding.top) *
-                      0.7,
-                  child: TransactionList(_userTransaction, _deleteTransaction),
+          if (_isLandscape)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Show Chart",
+                  style: Theme.of(context).textTheme.headline6,
                 ),
+                Switch.adaptive(
+                    activeColor: Theme.of(context).primaryColor,
+                    value: _showChartSwitchBtn,
+                    onChanged: (takeBool) {
+                      setState(() {
+                        _showChartSwitchBtn = takeBool;
+                      });
+                    })
+              ],
+            ),
+          if (!_isLandscape)
+            Container(
+              height: (_mediaQueryObject.size.height -
+                      appBar.preferredSize.height -
+                      _mediaQueryObject.padding.top) *
+                  0.3,
+              child: Chart(_recentTransactions),
+            ),
+          if (!_isLandscape) _transactionListWidget,
+          if (_isLandscape)
+            _showChartSwitchBtn
+                ? Container(
+                    height: (_mediaQueryObject.size.height -
+                            appBar.preferredSize.height -
+                            _mediaQueryObject.padding.top) *
+                        0.7,
+                    child: Chart(_recentTransactions),
+                  )
+                : _transactionListWidget,
         ]),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => _showTransactionModalSheet(context),
-      ),
+      floatingActionButton: Platform.isIOS
+          ? Container()
+          : FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () => _showTransactionModalSheet(context),
+            ),
     );
   }
 }
