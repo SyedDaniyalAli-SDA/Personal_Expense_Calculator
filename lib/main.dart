@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import './models/transaction.dart';
 import './widgets/add_transaction.dart';
@@ -7,9 +6,9 @@ import './widgets/chart.dart';
 import './widgets/transaction_list.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitUp]);
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations(
+  //     [DeviceOrientation.portraitUp, DeviceOrientation.portraitUp]);
   runApp(MyApp());
 }
 
@@ -67,9 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   //InitializingArray of Transaction~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  final List<Transaction> _userTransaction = [
-
-  ];
+  final List<Transaction> _userTransaction = [];
 
   //Method to add New Transaction to array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   void _addNewTransaction(
@@ -104,6 +101,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final _mediaQueryObject = MediaQuery.of(context);
+    final islandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     final appBar = AppBar(
       title: Text("Personal Expense"),
       actions: <Widget>[
@@ -113,41 +113,51 @@ class _MyHomePageState extends State<MyHomePage> {
         )
       ],
     );
+    final txListWidget = Container(
+      height: (_mediaQueryObject.size.height -
+              appBar.preferredSize.height -
+          _mediaQueryObject.padding.top) *
+          0.7,
+      child: TransactionList(_userTransaction, _deleteTransaction),
+    );
 
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
         child: Column(children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Show Chart",
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              Switch(
-                  value: _showChartSwitchBtn,
-                  onChanged: (takeBool) {
-                    setState(() {
-                      _showChartSwitchBtn = takeBool;
-                    });
-                  })
-            ],
-          ),
+          if (islandscape)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Show Chart",
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                Switch(
+                    value: _showChartSwitchBtn,
+                    onChanged: (takeBool) {
+                      setState(() {
+                        _showChartSwitchBtn = takeBool;
+                      });
+                    })
+              ],
+            ),
+          if (!islandscape)
+            Container(
+                height: (_mediaQueryObject.size.height -
+                        appBar.preferredSize.height -
+                    _mediaQueryObject.padding.top) *
+                    0.3,
+                child: Chart(_recentTransactions)),
+          if (!islandscape) txListWidget,
           _showChartSwitchBtn
               ? Container(
-                  height: (MediaQuery.of(context).size.height -
+                  height: (_mediaQueryObject.size.height -
                           appBar.preferredSize.height -
-                          MediaQuery.of(context).padding.top) *
-                      0.3,
-                  child: Chart(_recentTransactions))
-              : Container(
-                  height: (MediaQuery.of(context).size.height -
-                          appBar.preferredSize.height -
-                          MediaQuery.of(context).padding.top) *
+                      _mediaQueryObject.padding.top) *
                       0.7,
-                  child: TransactionList(_userTransaction, _deleteTransaction),
-                ),
+                  child: Chart(_recentTransactions))
+              : txListWidget
         ]),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
