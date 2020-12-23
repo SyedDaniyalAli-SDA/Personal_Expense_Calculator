@@ -17,6 +17,8 @@ class _AddTransactionState extends State<AddTransaction> {
   final amountController = TextEditingController();
   DateTime _selectedDate;
 
+
+
   //Method to Pass New Transaction to transaction Function~~~~~~~~~~~~~~~~~~~~~~
   void _addNewTransaction() {
     if (amountController.text.isEmpty) {
@@ -94,14 +96,6 @@ class _AddTransactionState extends State<AddTransaction> {
                           : "Selected Date: ${DateFormat.yMd().format(_selectedDate)}",
                     ),
                   ),
-                  FlatButton(
-                    textColor: Theme.of(context).primaryColor,
-                    child: Text(
-                      "Choose Date",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    onPressed: _displayDatePicker,
-                  )
                 ],
               ),
             ),
