@@ -19,17 +19,15 @@ class _AddTransactionState extends State<AddTransaction> {
 
   //Method to Pass New Transaction to transaction Function~~~~~~~~~~~~~~~~~~~~~~
   void _addNewTransaction() {
-
-    if(amountController.text.isEmpty)
-      {
-        return;
-      }
+    if (amountController.text.isEmpty) {
+      return;
+    }
     //Initializing Controllers of TextFields~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     String txTitle = titleController.text;
     double txAmount = double.parse(amountController.text);
 
     //Validating Data
-    if (txTitle.isEmpty || txAmount <= 0 || _selectedDate==null) {
+    if (txTitle.isEmpty || txAmount <= 0 || _selectedDate == null) {
       return;
     }
 
@@ -60,11 +58,10 @@ class _AddTransactionState extends State<AddTransaction> {
     return Card(
       child: Container(
         padding: EdgeInsets.only(
-          left:10,
-          right:10 ,
-          top:10 ,
-          bottom: MediaQuery.of(context).padding.bottom + 10),
-
+            left: 10,
+            right: 10,
+            top: 10,
+            bottom: MediaQuery.of(context).padding.bottom + 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
