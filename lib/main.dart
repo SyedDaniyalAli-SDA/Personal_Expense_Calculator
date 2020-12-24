@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import './models/transaction.dart';
@@ -114,15 +115,28 @@ class _MyHomePageState extends State<MyHomePage> {
         MediaQuery.of(context).orientation == Orientation.landscape;
 
     // Variables of Widgets~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    final appBar = AppBar(
-      title: Text("Personal Expense"),
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.add_chart),
-          onPressed: () => _showTransactionModalSheet(context),
-        )
-      ],
-    );
+    final PreferredSizeWidget appBar = Platform.isIOS
+        ? CupertinoNavigationBar(
+            middle: Text("Personal Expense"),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  child: Icon(CupertinoIcons.add),
+                  onDoubleTap: () => _showTransactionModalSheet(context),
+                )
+              ],
+            ),
+          )
+        : AppBar(
+            title: Text("Personal Expense"),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.add_chart),
+                onPressed: () => _showTransactionModalSheet(context),
+              )
+            ],
+          );
 
     final _transactionListWidget = Container(
       height: (_mediaQueryObject.size.height -
@@ -132,9 +146,9 @@ class _MyHomePageState extends State<MyHomePage> {
       child: TransactionList(_userTransaction, _deleteTransaction),
     );
 
-    return Scaffold(
-      appBar: appBar,
-      body: SingleChildScrollView(
+    //Page Body~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    final _pageBody = SafeArea(
+      child: SingleChildScrollView(
         child: Column(children: [
           if (_isLandscape)
             Row(
@@ -175,13 +189,24 @@ class _MyHomePageState extends State<MyHomePage> {
                 : _transactionListWidget,
         ]),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Platform.isIOS
-          ? Container()
-          : FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () => _showTransactionModalSheet(context),
-            ),
     );
+
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            child: _pageBody,
+            navigationBar: appBar,
+          )
+        : Scaffold(
+            appBar: appBar,
+            body: _pageBody,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: Platform.isIOS
+                ? Container()
+                : FloatingActionButton(
+                    child: Icon(Icons.add),
+                    onPressed: () => _showTransactionModalSheet(context),
+                  ),
+          );
   }
 }
