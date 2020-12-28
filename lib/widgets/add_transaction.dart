@@ -1,3 +1,5 @@
+import 'package:expense_calculator/custom_widgets/adaptive_flat_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -16,8 +18,6 @@ class _AddTransactionState extends State<AddTransaction> {
   final titleController = TextEditingController();
   final amountController = TextEditingController();
   DateTime _selectedDate;
-
-
 
   //Method to Pass New Transaction to transaction Function~~~~~~~~~~~~~~~~~~~~~~
   void _addNewTransaction() {
@@ -96,6 +96,7 @@ class _AddTransactionState extends State<AddTransaction> {
                           : "Selected Date: ${DateFormat.yMd().format(_selectedDate)}",
                     ),
                   ),
+                  AdaptiveFlatButton(text: "Chose Date", handler: _displayDatePicker,)
                 ],
               ),
             ),
