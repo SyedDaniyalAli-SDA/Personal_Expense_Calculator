@@ -69,13 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   //InitializingArray of Transaction~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  final List<Transaction> _userTransaction = [
-    Transaction(id: '1', title: 'Record 1', amount: 12, date: DateTime.now()),
-    Transaction(id: '1', title: 'Record 1', amount: 12, date: DateTime.now()),
-    Transaction(id: '1', title: 'Record 1', amount: 12, date: DateTime.now()),
-    Transaction(id: '1', title: 'Record 1', amount: 12, date: DateTime.now()),
-    Transaction(id: '1', title: 'Record 1', amount: 12, date: DateTime.now())
-  ];
+  final List<Transaction> _userTransaction = [];
 
   //Method to add New Transaction to array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   void _addNewTransaction(
