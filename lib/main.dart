@@ -108,14 +108,58 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final _mediaQueryObject = MediaQuery.of(context);
-    final _isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+  List<Widget> _buildLandscapeContent(
+      {MediaQueryData mediaQueryObject,
+      AppBar appBar,
+      Widget transactionListWidget}) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Show Chart",
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          Switch.adaptive(
+              activeColor: Theme.of(context).primaryColor,
+              value: _showChartSwitchBtn,
+              onChanged: (takeBool) {
+                setState(() {
+                  _showChartSwitchBtn = takeBool;
+                });
+              })
+        ],
+      ),
+      _showChartSwitchBtn
+          ? Container(
+              height: (mediaQueryObject.size.height -
+                      appBar.preferredSize.height -
+                      mediaQueryObject.padding.top) *
+                  0.7,
+              child: Chart(_recentTransactions),
+            )
+          : transactionListWidget
+    ];
+  }
 
-    // Variables of Widgets~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    final PreferredSizeWidget appBar = Platform.isIOS
+  List<Widget> _buildPortraitContent(
+      {MediaQueryData mediaQueryObject,
+      AppBar appBar,
+      Widget transactionListWidget}) {
+    return [
+      Container(
+        height: (mediaQueryObject.size.height -
+                appBar.preferredSize.height -
+                mediaQueryObject.padding.top) *
+            0.3,
+        child: Chart(_recentTransactions),
+      ),
+      transactionListWidget
+    ];
+  }
+
+  Widget _buildAppBarContent() {
+    return Platform.isIOS
         ? CupertinoNavigationBar(
             middle: Text("Personal Expense"),
             trailing: Row(
@@ -137,6 +181,16 @@ class _MyHomePageState extends State<MyHomePage> {
               )
             ],
           );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final _mediaQueryObject = MediaQuery.of(context);
+    final _isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
+    // Variables of Widgets~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    final PreferredSizeWidget appBar = _buildAppBarContent();
 
     final _transactionListWidget = Container(
       height: (_mediaQueryObject.size.height -
@@ -151,42 +205,15 @@ class _MyHomePageState extends State<MyHomePage> {
       child: SingleChildScrollView(
         child: Column(children: [
           if (_isLandscape)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Show Chart",
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                Switch.adaptive(
-                    activeColor: Theme.of(context).primaryColor,
-                    value: _showChartSwitchBtn,
-                    onChanged: (takeBool) {
-                      setState(() {
-                        _showChartSwitchBtn = takeBool;
-                      });
-                    })
-              ],
-            ),
+            ..._buildLandscapeContent(
+                appBar: appBar,
+                transactionListWidget: _transactionListWidget,
+                mediaQueryObject: _mediaQueryObject),
           if (!_isLandscape)
-            Container(
-              height: (_mediaQueryObject.size.height -
-                      appBar.preferredSize.height -
-                      _mediaQueryObject.padding.top) *
-                  0.3,
-              child: Chart(_recentTransactions),
-            ),
-          if (!_isLandscape) _transactionListWidget,
-          if (_isLandscape)
-            _showChartSwitchBtn
-                ? Container(
-                    height: (_mediaQueryObject.size.height -
-                            appBar.preferredSize.height -
-                            _mediaQueryObject.padding.top) *
-                        0.7,
-                    child: Chart(_recentTransactions),
-                  )
-                : _transactionListWidget,
+            ..._buildPortraitContent(
+                appBar: appBar,
+                mediaQueryObject: _mediaQueryObject,
+                transactionListWidget: _transactionListWidget),
         ]),
       ),
     );
