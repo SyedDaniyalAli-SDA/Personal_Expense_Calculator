@@ -59,8 +59,27 @@ class MyHomePage extends StatefulWidget {
   }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   bool _showChartSwitchBtn = false;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didAppChangeLifeCycleState(AppLifecycleState appLifecycleState){
+    print(appLifecycleState);
+  }
+
+  @override
+  dispose()
+  {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
 
   List<Transaction> get _recentTransactions {
     return _userTransaction.where((element) {
@@ -71,10 +90,11 @@ class _MyHomePageState extends State<MyHomePage> {
   //InitializingArray of Transaction~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   final List<Transaction> _userTransaction = [
     Transaction(id: '1', title: 'Record 1', amount: 12, date: DateTime.now()),
-    Transaction(id: '1', title: 'Record 1', amount: 12, date: DateTime.now()),
-    Transaction(id: '1', title: 'Record 1', amount: 12, date: DateTime.now()),
-    Transaction(id: '1', title: 'Record 1', amount: 12, date: DateTime.now()),
-    Transaction(id: '1', title: 'Record 1', amount: 12, date: DateTime.now())
+    Transaction(id: '2', title: 'Record 2', amount: 13, date: DateTime.now()),
+    Transaction(id: '3', title: 'Record 3', amount: 14, date: DateTime.now()),
+    Transaction(id: '4', title: 'Record 4', amount: 15, date: DateTime.now()),
+    Transaction(id: '5', title: 'Record 5', amount: 16, date: DateTime.now()),
+    Transaction(id: '6', title: 'Record 6', amount: 17, date: DateTime.now())
   ];
 
   //Method to add New Transaction to array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

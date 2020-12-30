@@ -7,13 +7,40 @@ class AddTransaction extends StatefulWidget {
   //  Getting Transaction Function into StateFul Widget~~~~~~~~~~~~~~~~~~~~~~~~~
   final Function _addTransaction;
 
-  AddTransaction(this._addTransaction);
+  AddTransaction(this._addTransaction) {
+    print('Constructor AddTransaction Widget');
+  }
 
   @override
-  _AddTransactionState createState() => _AddTransactionState();
+  _AddTransactionState createState() {
+    print('createState AddTransaction Widget');
+    return _AddTransactionState();
+  }
 }
 
 class _AddTransactionState extends State<AddTransaction> {
+  _AddTransactionState() {
+    print('Constructor AddTransaction State');
+  }
+
+  @override
+  void initState() {
+    print('initState AddTransaction Widget');
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant AddTransaction oldWidget) {
+    print('didUpdateWidget AddTransaction Widget');
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    print('dispose AddTransaction Widget');
+    super.dispose();
+  }
+
   //Declaring Controllers of TextFields~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   final titleController = TextEditingController();
   final amountController = TextEditingController();
@@ -96,7 +123,10 @@ class _AddTransactionState extends State<AddTransaction> {
                           : "Selected Date: ${DateFormat.yMd().format(_selectedDate)}",
                     ),
                   ),
-                  AdaptiveFlatButton(text: "Chose Date", handler: _displayDatePicker,)
+                  AdaptiveFlatButton(
+                    text: "Chose Date",
+                    handler: _displayDatePicker,
+                  )
                 ],
               ),
             ),
